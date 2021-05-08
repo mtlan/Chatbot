@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<title></title>
+	<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles/style.css') }}">
+	<!-- <link rel="stylesheet" type="text/css" href="../static/styles/style.css"> -->
+	
+	
+	
+</head>
+<style>
+	.bg {
+		background-image: url("{{ url_for('static', filename='assets/bg2.jpg') }}");
+		min-height: 660px;
+		background-repeat: no-repeat;
+		background-position: center;
+		background-size: cover;
+		position: relative;
+}
+</style>
+<body>
+	<div class="header">
+		<marquee style="align-content: center;">Chào mừng đến bệnh viện khoa tim mạch, vì số lượng người khám quá đông
+			nên chúng tôi không thể tiếp đón bệnh nhân. Vì vậy các
+			bạn nhập địa chỉ email để chatbot tư vấn và đặt lịch hẹn.</marquee>
+	</div>
+	<div class="bg">
+		<form action="{{ url_for('Home') }}" method="POST" class="container">
+			<h1>Chatbot</h1>
+			<label for="email"><b>Nhập địa chỉ email để tiếp tục</b></label>
+			<input type="text" placeholder="Nhập email" name="mail" required>
+
+			<label>
+				<input type="checkbox" name="re" style="margin-bottom: 15px;" required> Tôi đồng ý <a href="#" id="myBtn"> Điều
+					khoản & Điều kiện</a>
+			</label>
+			<button type="submit" class="btn">Đồng ý</button>
+		</form>
+	</div>
+	<div id="myCon" class="modal">
+		<div class="content">
+			<span class="close">&times;</span>
+			<p>
+			<h3 align="center"> Chính sách quyền riêng tư của Doctor Chatbot </h3>
+			Chính sách Bảo mật này áp dụng cho các hoạt động của Doctor Chatbot liên quan đến thông tin có 
+			được bằng và thông qua việc bạn sử dụng trang web, ứng dụng web hoặc ứng dụng di động của chúng 
+			tôi và các dịch vụ được cung cấp thông qua Ứng dụng. Doctor Chatbot cam kết tôn trọng quyền 
+			riêng tư của bạn và nhận ra nhu cầu của bạn về việc bảo vệ và quản lý thích hợp thông tin 
+			nhận dạng cá nhân (“PII”) và thông tin bạn chia sẻ. Mục đích của Chính sách Bảo mật này là 
+			giải thích các loại thông tin mà Dự án này thu được về người dùng Ứng dụng và / hoặc Dịch vụ 
+			của chúng tôi, cách thu thập thông tin, cách sử dụng, cách tiết lộ, cách bạn có thể truy cập 
+			thông tin này và những lựa chọn bạn có liên quan đến việc sử dụng của chúng tôi cũng như khả năng 
+			xem xét và sửa chữa thông tin của bạn. Bằng cách sử dụng Ứng dụng và / hoặc các Dịch vụ, bạn đang 
+			chấp nhận và đồng ý với việc sử dụng thông tin của bạn như được mô tả trong Chính sách này và bạn 
+			đồng ý bị ràng buộc bởi Chính sách này. Vui lòng xem lại Chính sách này một cách cẩn thận. <br>
+			Chính sách Bảo mật này chỉ áp dụng cho Ứng dụng và Dịch vụ này và có hiệu lực ngay khi 
+			bạn sử dụng Ứng dụng. Bất kỳ dịch vụ nào khác do bất kỳ nhà cung cấp độc lập nào cung cấp 
+			đều phải tuân theo các tiêu chuẩn hoặc chính sách về quyền riêng tư của nhà cung cấp cụ thể đó.
+			</p>
+			<p>
+			<h3 align="center"> Các điều khoản và điều kiện </h3>
+			PII duy nhất mà Ứng dụng thu được là thông tin mà bạn tự nguyện cung cấp hoặc cho phép. Khi bạn 
+			sử dụng Dịch vụ của chúng tôi, chúng tôi thu thập PII như tên, tuổi, giới tính, địa chỉ email 
+			của bạn, v.v. Chúng tôi cũng có thể thu thập PII hoặc Thông tin Sức khỏe được Bảo vệ (“PHI”) từ 
+			bạn khi bạn yêu cầu được kết nối với một y tế độc lập hành nghề, có thể cung cấp một bác sĩ được 
+			cấp phép theo cuộc gọi để cung cấp các dịch vụ chăm sóc sức khỏe tổng quát cho người lớn và trẻ em 
+			không khẩn cấp tại địa điểm của bạn; tạo hồ sơ; hoặc bình luận về các bài báo hoặc hoàn thành khảo sát. <br>
+			Thông tin mà chúng tôi thu thập khác nhau tùy thuộc vào cách bạn sử dụng Dịch vụ của chúng tôi. 
+			Khi bạn chọn Đăng ký, bạn sẽ cần cung cấp cho chúng tôi thông tin liên quan đến sức khỏe mà 
+			nhà cung cấp sẽ cần để xác định xem họ có sẵn sàng cung cấp dịch vụ cho bạn hay không. Thông tin 
+			đó sẽ được liên kết với hồ sơ của bạn. Bất kỳ PHI nào mà bạn cung cấp thông qua Ứng dụng mô tả 
+			ngắn gọn các triệu chứng của bạn (hoặc của bất kỳ trẻ vị thành niên nào mà bạn yêu cầu Dịch vụ) 
+			sẽ được gửi đến nhà cung cấp dịch vụ y tế được tuyển dụng của chúng tôi hoặc nhà cung cấp thay thế 
+			độc lập để được sử dụng để điều trị và xử lý khoản thanh toán của bạn cho Chuyến khám, và các dịch vụ 
+			khác. Tất cả các nhà cung cấp có nghĩa vụ bảo vệ tất cả PHI của bệnh nhân theo các quy tắc của HIPAA, 
+			như được nêu trong Thông báo về Thực hành Quyền riêng tư của chúng tôi.
+			</p>
+		</div>
+	</div>
+	<script>
+		var con = document.getElementById("myCon");
+		var btn = document.getElementById("myBtn");
+		var span = document.getElementsByClassName("close")[0];
+		
+		btn.onclick = function() {
+			con.style.display = "block";
+		}
+		window.onclick = function(event) {
+  			if (event.target == con) {
+    			con.style.display = "none";
+  		}
+		span.onclick = function() {
+  			con.style.display = "none";
+}
+}
+
+	</script>
+</body>
+
+</html>

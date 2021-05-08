@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles/form.css') }}">
+  <!-- <link rel="stylesheet" type="text/css" href="../static/styles/form.css"> -->
+   
+</head>
+
+<body style="background-image: url('{{ url_for('static', filename='assets/bgf.jpg' ) }}'); background-repeat: no-repeat; background-attachment: fixed;
+  background-size: cover;">
+  <div style="text-align: center;">
+    <h2 style="padding-top: 250px; padding-left: 3%; color: blue; font-weight: 600;">Bấm vào đây để lấy biểu mẫu</h2>
+    <button onclick="myFunction()"
+      style="width:auto; position: absolute; top: 45%; right: 42%; border: 2px solid #000000; box-shadow: 0 12px 16px 0 rgba(0,0,0,0.24), 0 17px 50px 0 rgba(0,0,0,0.19);">Điền thông tin
+      </button>
+  </div>
+
+  <div id="id01" class="modal">
+    <form class="modal-content animate" name="passdata" action="." method="post">
+      <div class="imgcontainer">
+        <h2> Thông tin </h2>
+        <span onclick="myClose()" class="close"
+          title="Close Modal">&times;</span>
+      </div>
+      
+      <div class="container">
+        <label for="cpt">Các loại đau ngực</label>
+        <div class="tooltip">(*)
+          <span class="tooltiptext">Chọn loại đau ngực mà cá nhân từng trải qua: gây ra khi cơ tim của bạn 
+            không nhận đủ máu giàu oxy.</span>
+        </div>
+        <select id="gender" name="cp" required>
+          <option value="" disabled selected>Chọn loại đau ngực ..</option>
+          <option value="Typical Angina">Đau thắt ngực điển hình</option>
+          <option value="Atypical Angina">Đau thắt ngực không điển hình</option>
+          <option value="Non-anginal Pain">Không đau thắt ngực</option>
+          <option value="Asymptomatic">Không có triệu chứng</option>
+        </select> <br>
+
+        <label for="rbp">Huyết áp khi nghỉ ngơi</label>
+        <div class="tooltip">(*)
+          <span class="tooltiptext">Giá trị huyết áp của một cá nhân tính bằng mmHg (đơn vị): có thể cao do 
+            béo phì, cholesterol cao hoặc tiểu đường.</span>
+        </div>
+        <input type="text" style="width: 96%" id="Age" name="trestbps" placeholder="Giá trị huyết áp (mmHg) ..."
+          required> <br>
+
+        <label for="sc">Cholesterol huyết thanh</label>
+        <div class="tooltip">(*)
+          <span class="tooltiptext">Cholesterol huyết thanh tính bằng mg / dl (đơn vị): Mức cholesterol 
+            lipoprotein mật độ thấp (LDL) cao.</span>
+        </div>
+        <input type="text" style="width: 96%" id="CS" name="chol" placeholder="Giá trị Cholesterol (mg / dl) ..." required>
+        <br>
+
+        <label for="fbs" disabled selected>Đo lượng đường trong máu</label>
+        <div class="tooltip">(*)
+          <span class="tooltiptext">So sánh giá trị đường huyết lúc đói của một cá nhân với 120mg / dl. Không 
+            sản xuất đủ hormone do tuyến tụy tiết ra (insulin).</span>
+        </div>
+        <select id="fps" name="fbs" required>
+          <option value="" disabled selected>Đường huyết lúc đói> 120mg / dl</option>
+          <option value="Yes">Có</option>
+          <option value="No">Không</option>
+        </select> <br>
+
+        <label for="recg" disabled selected>ECG khi nghỉ ngơi</label>
+        <div class="tooltip">(*)
+          <span class="tooltiptext">Kết quả điện tâm đồ khi nghỉ ngơi.</span>
+        </div>
+        <select id="fps" name="restecg" required>
+          <option value="" disabled selected>ECG khi nghỉ ngơi</option>
+          <option value="Normal">Bình thường</option>
+          <option value="Having ST-T Wave Abnormality">Có bất thường sóng ST-T</option>
+          <option value="Left Ventricular Hyperthrophy">Phì đại thất trái</option>
+        </select> <br>
+
+        <label for="mhra">Tối đa Nhịp tim đã đạt được</label>
+        <input type="text" style="width: 96%" id="CS" name="thalach" placeholder="Tối đa Nhịp tim .." required> <br>
+
+        <label for="eia">Đau thắt ngực do tập thể dục</label>
+        <select id="fps" name="exang" required>
+          <option value="" disabled selected>Đau thắt ngực do tập thể dục</option>
+          <option value="Yes">Có</option>
+          <option value="No">Không</option>
+        </select> <br>
+
+        <label for="stdie">Suy nhược ST do tập thể dục gây ra</label>
+        <input type="text" style="width: 96%" id="Age" name="oldpeak" placeholder="Nhập giá trị ..." required> <br>
+
+        <label for="gender">Bài tập cao điểm Phân đoạn ST</label>
+        <div class="tooltip">(*)
+          <span class="tooltiptext">Kiểm tra căng thẳng điện tâm đồ trên máy chạy bộ được coi là bất 
+            thường khi có đoạn ST bị lõm ngang hoặc dốc xuống - 1 mm ở 60â € “80 mili giây sau điểm J.</span>
+        </div>
+        <select id="fps" name="slope" required>
+          <option value="" disabled selected>Bài tập cao điểm Phân đoạn ST</option>
+          <option value="Upsloping">Nhảy lên</option>
+          <option value="Flat">Bằng phẳng</option>
+          <option value="Downsloping">Downsloping</option>
+        </select> <br>
+
+        <label for="mvcf">Số lượng tàu chính do Flourosopy tô màu</label>
+        <input type="text" style="width: 96%" id="CS" name="ca" placeholder="Nhập giá trị ..." required> <br>
+
+        <label for="gender">bệnh thalassemia</label>
+        <select id="fps" name="thal" required>
+          <option value="" disabled selected>Thal </option>
+          <option value="Normal">Bình thường</option>
+          <option value="Fixed Defect">Đã sửa lỗi</option>
+          <option value="Reversible Defect">Khuyết điểm có thể đảo ngược</option>
+        </select> <br>
+
+        <button type="submit" style="width: 100%">Nộp thông tin</button>
+      </div>
+      <div class="container" style="background-color:#f1f1f1">
+        <button type="button" onclick="document.getElementById('id01').style.display='none'"
+          class="cancelbtn">Hủy</button>
+      </div>
+    </form>
+
+  </div>
+  <script>
+    // Get the modal
+    var ContentForm = document.getElementById('id01');
+    function myFunction() {
+      ContentForm.style.display = "block";
+    }
+    function myClose() {
+      ContentForm.style.display = "none"
+    }
+    // When the user clicks anywhere outside of the modal, close it
+    window.onclick = function (event) {
+      if (event.target == ContentForm) {
+        ContentForm.style.display = "none";
+      }
+    }
+  </script>
+</body>
+
+</html>

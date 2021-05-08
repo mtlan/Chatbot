@@ -1,0 +1,34 @@
+x = "awesome"   // biến toàn cục (nằm bên ngoài)
+
+def myfunc():
+  x = "fantastic"   // biến cục bộ
+  print("Python is " + x)
+
+myfunc()
+
+print("Python is " + x)
+
+Chào mừng đến bệnh viện khoa tim mạch, vì số lượng người khám quá đông nên chúng tôi không thể tiếp đón bệnh nhân. Vì vậy các 
+bạn nhập địa chỉ email để chatbot tư vấn và đặt lịch hẹn
+
+ngrok đưa localhost ra internet
+bằng cách tải ngrok và lưu nó thư mục từ thư mục chạy cmd có chứa nó
+"ngrok http 5000" (5000 là port)
+vd có localhost từ web với port là 1111 thì "ngrok http 1111" (run sẽ sinh domain)
+
+
+
+here, we have to fill a report which takes in values realted to the heart disease dataset
+. It will be fed into the model of SVM algo
+
+cp
+trestbps
+chol
+fbs
+restecg
+thalach
+exang
+oldpeak
+slope
+ca
+thal  
