@@ -5,21 +5,19 @@ import json
 import gmail
 
 app = Flask(__name__)
-mail = ""
+doctor, date, time, mail = "","","",""
 age1, gender, name = "","",""
 t, prt, speech = "","",""
-sym1, sym2 = "",""
-new_report = ""
 problem, sym_duration = "",""
 q1,q2,q3,q4,q5,q6 = 0,0,0,0,0,0
 sym1,sym2,sym3 = "","",""
-new_report, tips, soln = "","", ""
-doctor, date, time = "","",""
+new_report, tips, soln = "","",""
+
 
 
 # @app.route("/")                   # at the end point /
 # def hello():                      # call method hello
-#     return "Hello World!"
+# return "Hello World!"
 @app.route('/Home')
 def Home():
     return render_template('Home.html')
@@ -48,11 +46,10 @@ def Chatbot():
 @app.route('/', methods=['POST'])
 def getvalue():
     age = age1
-    
     #sex = request.form['sex']
     sex = gender
-    if sex == 'Male': sex = 1
-    elif sex == 'Female': sex = 0
+    if sex == 'Nam': sex = 1
+    elif sex == 'Nữ': sex = 0
 
     cp = request.form['cp']
     if cp == 'Typical Angina': cp = 0
@@ -61,55 +58,51 @@ def getvalue():
     elif cp == 'Asymptomatic': cp = 3
 
     trestbps = request.form['trestbps']
-
     chol = request.form['chol']
 
     fbs = request.form['fbs']
-    if fbs == 'Yes': cp = 1
-    elif fbs == 'No': cp = 0
+    if fbs == 'Yes': fbs = 1
+    elif fbs == 'No': fbs = 0
 
     restecg = request.form['restecg']
-    if restecg == 'Normal': cp = 0
-    elif restecg == 'Having ST-T Wave Abnormality': cp = 1
-    elif restecg == 'Left Ventricular Hyperthrophy': cp = 2
+    if restecg == 'Normal': restecg = 0
+    elif restecg == 'Having ST-T Wave Abnormality': restecg = 1
+    elif restecg == 'Left Ventricular Hyperthrophy': restecg = 2
 
     thalach = request.form['thalach']
-    if thalach == 'Yes': cp = 1
-    elif thalach == 'No': cp = 0
 
     exang = request.form['exang']
-    if exang == 'Yes': cp = 1
-    elif exang == 'No': cp = 0
+    if exang == 'Yes': exang = 1
+    elif exang == 'No': exang = 0
 
     oldpeak = request.form['oldpeak']
 
     slope = request.form['slope']
-    if slope == 'Upsloping': cp = 0
-    elif slope == 'Flat': cp = 1
-    elif slope == 'Downsloping': cp = 2
+    if slope == 'Upsloping': slope = 0
+    elif slope == 'Flat': slope = 1
+    elif slope == 'Downsloping': slope = 2
 
     ca = request.form['ca']
 
     thal = request.form['thal']
-    if thal == 'Normal': cp = 1
-    elif thal == 'Fixed Defect': cp = 2
-    elif thal == 'Reversible Defect': cp = 3
-
-    print(cp, trestbps, chol, fbs, restecg, thalach, exang, oldpeak, slope, ca, thal)
+    if thal == 'Normal': thal = 1
+    elif thal == 'Fixed Defect': thal = 2
+    elif thal == 'Reversible Defect': thal = 3
+    
+    # lỗi không dự đoán vì đầu ra là chuỗi kí tự
+    print(age, sex, cp, trestbps, chol, fbs, restecg, thalach, exang, oldpeak, slope, ca, thal)
+    global t
     try:
-        global t
         t = SVM.svm_pred(age, sex, cp, trestbps, chol, fbs, restecg, thalach, exang, oldpeak, slope, ca, thal)
     except Exception as e:
         print(type(e).__name__)
     global speech
     # global prt
     if t == 0:
-        # prt = "Không có bệnh tim"
         speech = "Báo cáo của bạn trông ổn."
     if t == 1:
-        # prt = "Bệnh tim hiện tại"
-        speech = "Bạn có thể đang bị bệnh / vấn đề về tim mạch!"
-    print(t, prt)
+        speech = "Bạn có thể đang có vấn đề tim mạch!"
+    print(t)
     return render_template('pass.html', n=t, s=prt)
 
 @app.route('/webhook', methods=['POST'])
@@ -140,24 +133,30 @@ def makeWebhookResult(req):
     if query_response.get("action") == "user_name":
         r = query_response.get("parameters")
         r1 = r.get("given_name")
+        global name
         name = r1
 
     if query_response.get("action") == "user_age":
         r = query_response.get("parameters")
-        r1 = r.get("age")
-        r2 = r1.get("amount")
-        age1 = int(r2)
+        # note lỗi
+        # age sẽ được lấy khi người dùng nhập tuổi
+        r2 = r.get("age")
+        r1 = r2.get("amount")
+        global age1
+        age1 = int(r1)
 
+    # kiểm tra tuổi bệnh nhân
     if query_response.get("action") == "DefaultWelcomeIntent.DefaultWelcomeIntent-custom.Checkup_Patient-custom":
         r = query_response.get("parameters")
         r1 = r.get("Gender")
-        gender = a1
-        a1 = "OK" + name + "(" + str(age1) + "), Vui lòng điền và gửi biểu mẫu báo cáo ở phía bên phải ...."
+        global gender
+        gender = r1
+        a1 = "OK" + name + "(" + str(age1) + "), Vui lòng điền vào biểu mẫu báo cáo ở phía bên phải ...."
         res = { "fulfillmentText": a1, }
 
     # Checkup_Patient_filling
     if query_response.get("action") == "DefaultWelcomeIntent.DefaultWelcomeIntent-custom.Checkup_Patient-custom.Checkup_Patient_gender-custom":
-        a2 = "Cảm ơn " + name + ", sau khi phân tích thông tin bạn đã cung cấp cho chúng tôi, Hệ thống dự đoán rằng "+ speech +" Xin lưu ý, đây không phải là chẩn đoán. Luôn đến gặp bác sĩ nếu bạn nghi ngờ, hoặc nếu các triệu chứng của bạn trở nên tồi tệ hơn hoặc không cải thiện. Nếu tình hình của bạn nghiêm trọng, hãy luôn gọi dịch vụ khẩn cấp. Bạn có muốn đặt lịch hẹn với bác sĩ không?" 
+        a2 = "Cảm ơn " + name + ", sau khi phân tích thông tin bạn đã cung cấp cho chúng tôi, Hệ thống dự đoán rằng "+ speech +" Xin lưu ý, đây không phải là chẩn đoán. Hãy đến gặp bác sĩ nếu bạn nghi ngờ, hoặc nếu các triệu chứng của bạn trở nên tồi tệ hơn hoặc không cải thiện. Nếu tình hình của bạn nghiêm trọng, hãy luôn gọi dịch vụ khẩn cấp. Bạn có muốn đặt lịch hẹn với bác sĩ không?" 
         res = {  "fulfillmentText": a2, }
         
     ############ Suffering Patient ##########################
@@ -222,7 +221,7 @@ def makeWebhookResult(req):
         
     # Suffering_Patient_sym1
     if query_response.get("action") == "DefaultWelcomeIntent.DefaultWelcomeIntent-custom.Suffering_Patient-custom.Suffering_Patient_symp_dur-custom.Suffering_Patient_Q2-custom.Suffering_Patient_Q3-custom.Suffering_Patient_Q4-custom.Suffering_Patient_Q5-custom.Suffering_Patient_Q6-custom":
-        # Q.  brain stroke/ Overweight/Obese / Kidney Disease
+
         r = query_response.get("parameters")
         r1 = r.get("Confirmation")
         global q6
@@ -256,17 +255,17 @@ def makeWebhookResult(req):
             - Tức ngực.
             - Mệt mỏi bất thường.
             - Sự lo ngại .
-            - Đau ngực lan Hàm. - không có '''
+            - Đau ngực lan rộng quai hàm. - không có '''
         global sym3
         sym3 = query_response.get("queryText")
         
         ###### Create Report ############
         new_report = ""
-        new_report += "Tóm tắt: Bạn đã có "+problem+" cho "+sym_duration+" thời hạn."
+        new_report += "Tóm tắt: Bạn đang có vấn đề về / đang bị "+problem+" trong "+sym_duration+"."
         if q1 == 1: new_report += "Bạn đã bị bệnh tim trước đây, "
         if q2 == 1: new_report += "Bạn bị / mắc bệnh tiểu đường, "
         if q3 == 1: new_report += "Bạn bị / bị cao huyết áp, "
-        if q4 == 1: new_report += "Bạn đã bị Hen suyễn HOẶC bệnh phổi tắc nghẽn mãn tính, "
+        if q4 == 1: new_report += "Bạn đã bị hen suyễn HOẶC bệnh phổi tắc nghẽn mãn tính, "
         if q5 == 1: new_report += "Bạn đang hút thuốc (hoặc đã từng hút thuốc), "
         if q6 == 1: new_report += "Bạn đã / đang mắc: Đột quỵ não HOẶC Bệnh thận HOẶC Béo phì, "
         if sym1 not in("none","None") or sym2 not in("none","None") or sym3 not in("none","None"): new_report += "và cũng có các triệu chứng như "
@@ -275,6 +274,7 @@ def makeWebhookResult(req):
         if sym3 not in("none","None"): new_report += sym3
         if (q1,q2,q3,q4,q5,q6) == 0: new_report += "Bạn không có bất kỳ triệu chứng đã đề cập ở trên!"
     
+    # phần khai báo tên sau khi kết thúc phiên tư vấn và nhập thông tin
     # Suffering_Patient_sym_report_filling
     if query_response.get("action") == "Suffering_Patient_sym2.Suffering_Patient_sym2-custom.Suffering_Patient_sym3-custom.Suffering_Patient_sym_final-custom.Suffering_Patient_sym_report_yes-custom":
         r = query_response.get("parameters")
@@ -283,11 +283,11 @@ def makeWebhookResult(req):
         r2 = r.get("age")
         r1 = r2.get("amount")
         age1 = int(r1)
-        #print("Patient:", name, age1, gender )
+        # print("Bệnh nhân:", name, age1, gender )
         
     # Suffering_Patient_sym_report_results
     if query_response.get("action") == "Suffering_Patient_sym2.Suffering_Patient_sym2-custom.Suffering_Patient_sym3-custom.Suffering_Patient_sym_final-custom.Suffering_Patient_sym_report_yes-custom.Suffering_Patient_sym_report_filling-custom":
-        ans2 = "Cảm ơn " + name + ", sau khi phân tích thông tin bạn đã cung cấp cho chúng tôi, Hệ thống dự đoán rằng"+ speech +" "+ new_report + ". Một số cách bạn có thể tránh vấn đề này là: " + soln + "--> Xin lưu ý, đây không phải là chẩn đoán. Luôn đến gặp bác sĩ nếu bạn nghi ngờ, hoặc nếu các triệu chứng của bạn trở nên tồi tệ hơn hoặc không cải thiện. Nếu tình hình của bạn nghiêm trọng, hãy luôn gọi dịch vụ khẩn cấp. Bạn có muốn đặt lịch hẹn với bác sĩ không?"
+        ans2 = "Cảm ơn " + name + ", sau khi phân tích thông tin bạn đã cung cấp cho chúng tôi, Hệ thống dự đoán rằng "+ speech +" "+ new_report + ". Một số cách bạn có thể tránh vấn đề này là: " + soln + "--> Xin lưu ý, đây không phải là chẩn đoán. Luôn đến gặp bác sĩ nếu bạn nghi ngờ, hoặc nếu các triệu chứng của bạn trở nên tồi tệ hơn hoặc không cải thiện. Nếu tình hình của bạn nghiêm trọng, hãy luôn gọi dịch vụ khẩn cấp. Bạn có muốn đặt lịch hẹn với bác sĩ không?"
         res = {  "fulfillmentText": ans2, }
     
     # Suffering_Patient_sym_report_no
@@ -302,7 +302,7 @@ def makeWebhookResult(req):
         r1 = query_response.get("queryText")
         global doctor
         doctor = r1
-        #print("----Doctor: ", doctor)
+        
     
     # app_booked
     if query_response.get("action") == "doctors_list.doctors_list-custom.app_date_time-custom":
@@ -321,8 +321,4 @@ def makeWebhookResult(req):
 
 if __name__ == "__main__":               
     port = int(os.getenv('PORT', 5000))
-    app.run(debug=True, port=port, host='0.0.0.0')                       
-          
-
-
-    
+    app.run(debug=True, port=port, host='0.0.0.0')        

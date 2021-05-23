@@ -32,7 +32,7 @@
             không nhận đủ máu giàu oxy.</span>
         </div>
         <select id="gender" name="cp" required>
-          <option value="" disabled selected>Chọn loại đau ngực ..</option>
+          <option value="" disabled selected>Chọn loại đau ngực ...</option>
           <option value="Typical Angina">Đau thắt ngực điển hình</option>
           <option value="Atypical Angina">Đau thắt ngực không điển hình</option>
           <option value="Non-anginal Pain">Không đau thắt ngực</option>
@@ -49,8 +49,7 @@
 
         <label for="sc">Cholesterol huyết thanh</label>
         <div class="tooltip">(*)
-          <span class="tooltiptext">Cholesterol huyết thanh tính bằng mg / dl (đơn vị): Mức cholesterol 
-            lipoprotein mật độ thấp (LDL) cao.</span>
+          <span class="tooltiptext">Cholesterol huyết thanh tính bằng mg / dl (đơn vị): Mức cholesterol lipoprotein mật độ thấp (LDL) cao.</span>
         </div>
         <input type="text" style="width: 96%" id="CS" name="chol" placeholder="Giá trị Cholesterol (mg / dl) ..." required>
         <br>
@@ -61,7 +60,7 @@
             sản xuất đủ hormone do tuyến tụy tiết ra (insulin).</span>
         </div>
         <select id="fps" name="fbs" required>
-          <option value="" disabled selected>Đường huyết lúc đói> 120mg / dl</option>
+          <option value="" disabled selected>Đường huyết lúc đói > 120mg / dl</option>
           <option value="Yes">Có</option>
           <option value="No">Không</option>
         </select> <br>
@@ -77,7 +76,7 @@
           <option value="Left Ventricular Hyperthrophy">Phì đại thất trái</option>
         </select> <br>
 
-        <label for="mhra">Tối đa Nhịp tim đã đạt được</label>
+        <label for="mhra">Tối đa nhịp tim đã đạt được</label>
         <input type="text" style="width: 96%" id="CS" name="thalach" placeholder="Tối đa Nhịp tim .." required> <br>
 
         <label for="eia">Đau thắt ngực do tập thể dục</label>
@@ -97,20 +96,20 @@
         </div>
         <select id="fps" name="slope" required>
           <option value="" disabled selected>Bài tập cao điểm Phân đoạn ST</option>
-          <option value="Upsloping">Nhảy lên</option>
-          <option value="Flat">Bằng phẳng</option>
-          <option value="Downsloping">Downsloping</option>
+          <option value="Upsloping">upsloping</option>
+          <option value="Flat">flat</option>
+          <option value="Downsloping">downsloping</option>
         </select> <br>
 
-        <label for="mvcf">Số lượng tàu chính do Flourosopy tô màu</label>
+        <label for="mvcf">Số mạch chính được định màu (0-3) màu bởi flourosopy</label>
         <input type="text" style="width: 96%" id="CS" name="ca" placeholder="Nhập giá trị ..." required> <br>
 
-        <label for="gender">bệnh thalassemia</label>
+        <label for="gender">Bệnh thalassemia</label>
         <select id="fps" name="thal" required>
-          <option value="" disabled selected>Thal </option>
+          <option value="" disabled selected>Thal</option>
           <option value="Normal">Bình thường</option>
-          <option value="Fixed Defect">Đã sửa lỗi</option>
-          <option value="Reversible Defect">Khuyết điểm có thể đảo ngược</option>
+          <option value="Fixed Defect">Fixed defect</option>
+          <option value="Reversible Defect">Reversable defect </option>
         </select> <br>
 
         <button type="submit" style="width: 100%">Nộp thông tin</button>

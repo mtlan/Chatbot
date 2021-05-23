@@ -1,17 +1,8 @@
 import smtplib
 
-
-# mailto = ""
-# doctor = ""
-# date = ""
-# time = ""
-# name = ""
-# report = ""
-# gmailaddress = ""
-# gmailpassword = ""
 def sendEmail( mailto, doctor, date, time, name, report ):
-    gmailaddress = "điền email"  # EMAIL_ID
-    gmailpassword = "điền password"  # PASSWORD
+    gmailaddress = "điền email"  # Địa chỉ email 
+    gmailpassword = "điền password"  # Mật khẩu gmail
 
     sub = "Đã xác nhận: Đã đặt lịch hẹn với bác sĩ"
     if (len(report) == 0): report = "Checkup"
