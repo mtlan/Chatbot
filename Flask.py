@@ -1,5 +1,7 @@
-from flask import Flask, request, jsonify, escape, render_template, make_response
-import os           # import flask
+from flask import Flask, request, jsonify, escape, render_template, make_response, sessions
+import os
+
+from flask.globals import session           # import flask
 import SVM
 import json
 import gmail
@@ -7,7 +9,7 @@ import gmail
 app = Flask(__name__)
 doctor, date, time, mail = "","","",""
 age1, gender, name = "","",""
-t, prt, speech = "","",""
+pred, prt, speech = "","",""
 problem, sym_duration = "",""
 q1,q2,q3,q4,q5,q6 = 0,0,0,0,0,0
 sym1,sym2,sym3 = "","",""
@@ -40,7 +42,7 @@ def Form():
 
 @app.route('/Chatbot')
 def Chatbot():
-    if mail == "": return render_template('index.html')
+    if mail == "": return render_template('Home.html')
     else: return render_template('Chatbot.html')
 
 @app.route('/', methods=['POST'])
@@ -91,19 +93,19 @@ def getvalue():
     
     # lỗi không dự đoán vì đầu ra là chuỗi kí tự
     print(age, sex, cp, trestbps, chol, fbs, restecg, thalach, exang, oldpeak, slope, ca, thal)
-    global t
+    global pred
     try:
-        t = SVM.svm_pred(age, sex, cp, trestbps, chol, fbs, restecg, thalach, exang, oldpeak, slope, ca, thal)
+        pred = SVM.svm_pred(age, sex, cp, trestbps, chol, fbs, restecg, thalach, exang, oldpeak, slope, ca, thal)
     except Exception as e:
         print(type(e).__name__)
     global speech
     # global prt
-    if t == 0:
+    if pred == 0:
         speech = "Báo cáo của bạn trông ổn."
-    if t == 1:
+    if pred == 1:
         speech = "Bạn có thể đang có vấn đề tim mạch!"
-    print(t)
-    return render_template('pass.html', n=t, s=prt)
+    print(pred)
+    return render_template('pass.html', n=pred, s=prt)
 
 @app.route('/webhook', methods=['POST'])
 def webhook():
@@ -136,6 +138,7 @@ def makeWebhookResult(req):
         global name
         name = r1
 
+    # Patient_Age
     if query_response.get("action") == "user_age":
         r = query_response.get("parameters")
         # note lỗi
@@ -145,7 +148,7 @@ def makeWebhookResult(req):
         global age1
         age1 = int(r1)
 
-    # kiểm tra tuổi bệnh nhân
+    # kiểm tra tuổi bệnh nhân (Checkup_Patient_gender)
     if query_response.get("action") == "DefaultWelcomeIntent.DefaultWelcomeIntent-custom.Checkup_Patient-custom":
         r = query_response.get("parameters")
         r1 = r.get("Gender")
@@ -171,7 +174,7 @@ def makeWebhookResult(req):
         if problem == "Tức Ngực": soln = "Thuốc giảm đau, chẳng hạn như aspirin, có thể giúp giảm đau tim / ngực liên quan đến các trường hợp ít nghiêm trọng hơn. Khi cơn đau tim ập đến, nằm ngay lập tức với đầu nâng cao hơn cơ thể có thể giúp giảm đau. Tư thế hơi thẳng đứng sẽ giúp ích khi cơn đau do trào ngược."
         elif problem == "Cao Huyết Áp": soln = "Huyết áp thường tăng khi cân nặng (Béo phì) tăng. Hoạt động thể chất thường xuyên như 150 phút mỗi tuần có thể làm giảm huyết áp của bạn khoảng 5 đến 8 mm Hg nếu bạn bị huyết áp cao. Ăn một chế độ ăn nhiều ngũ cốc nguyên hạt, trái cây, rau và các sản phẩm từ sữa ít béo, đồng thời loại bỏ chất béo bão hòa và cholesterol có thể làm giảm huyết áp của bạn lên đến 11 mm Hg nếu bạn bị huyết áp cao. Căng thẳng mãn tính và hút thuốc cũng có thể góp phần làm tăng huyết áp, vì vậy hãy tránh điều đó."
         elif problem in("vấn đề về hô hấp", "khó thở"): soln = "Hít vào sâu bằng bụng và thở ngửa cũng có thể giúp kiểm soát tình trạng khó thở của bạn. Tìm một vị trí thoải mái và được hỗ trợ để đứng hoặc nằm có thể giúp bạn thư giãn và lấy lại hơi thở. Hít hơi có thể giúp đường mũi thông thoáng, giúp thở dễ dàng hơn. Uống cà phê đen có thể giúp điều trị chứng khó thở, giảm mệt mỏi ở các cơ đường thở. Thừa cân cũng có thể gây ra gián đoạn hô hấp khi bạn ngủ (ngưng thở khi ngủ)."
-        elif problem in("Buồn ngủ", "ngủ"): soln = "Thiết lập cho mình một giấc ngủ thoải mái: Hãy tuân theo một lịch trình ngủ / thức đều đặn. Tắt TV, máy tính và các thiết bị khác trước khi đi ngủ. Giữ phòng ngủ của bạn mát mẻ và tối. Tránh uống rượu trước khi đi ngủ và uống cà phê vào buổi chiều hoặc buổi tối. Tập thể dục mỗi sáng."
+        elif problem in("Buồn ngủ", "ngủ", "giấc ngủ"): soln = "Thiết lập cho mình một giấc ngủ thoải mái: Hãy tuân theo một lịch trình ngủ / thức đều đặn. Tắt TV, máy tính và các thiết bị khác trước khi đi ngủ. Giữ phòng ngủ của bạn mát mẻ và tối. Tránh uống rượu trước khi đi ngủ và uống cà phê vào buổi chiều hoặc buổi tối. Tập thể dục mỗi sáng."
         
     # Suffering_Patient_symp_dur
     if query_response.get("action") == "DefaultWelcomeIntent.DefaultWelcomeIntent-custom.Suffering_Patient-custom":
@@ -232,7 +235,8 @@ def makeWebhookResult(req):
         ''' Q. - Đau ngực khi thở vào.
             - Đau rát ở ngực / bụng trên.
             - Đau ngực do ấn vào lồng ngực.
-            - Đau ngực nặng hơn khi cử động. - không có '''
+            - Đau ngực nặng hơn khi cử động. 
+            - không có '''
         global sym1
         sym1 = query_response.get("queryText")
     
@@ -241,7 +245,8 @@ def makeWebhookResult(req):
         ''' Q. - Đau tức ngực khi nghỉ ngơi. 
             - Đau ngực đột ngột. 
             - Khó thở. 
-            - Thở nhanh hoặc nông. - không có ''' 
+            - Thở nhanh hoặc nông. 
+            - không có ''' 
         global sym2
         sym2 = query_response.get("queryText") 
         
@@ -250,16 +255,19 @@ def makeWebhookResult(req):
         ''' Q. - Cảm thấy tim của bạn đang đập nhanh hoặc lệch nhịp.
             - Đau ngực lan xuống cánh tay trái.
             - Đau ngực lan tỏa khi gắng sức.
-            - Đau khớp / bụng. - không có
+            - Đau khớp / bụng. 
+            - không có
             
             - Tức ngực.
             - Mệt mỏi bất thường.
             - Sự lo ngại .
-            - Đau ngực lan rộng quai hàm. - không có '''
+            - Đau ngực lan rộng quai hàm. 
+            - không có '''
         global sym3
         sym3 = query_response.get("queryText")
         
         ###### Create Report ############
+        # sym_duration về thời gian bị mắc
         new_report = ""
         new_report += "Tóm tắt: Bạn đang có vấn đề về / đang bị "+problem+" trong "+sym_duration+"."
         if q1 == 1: new_report += "Bạn đã bị bệnh tim trước đây, "
@@ -290,7 +298,7 @@ def makeWebhookResult(req):
         ans2 = "Cảm ơn " + name + ", sau khi phân tích thông tin bạn đã cung cấp cho chúng tôi, Hệ thống dự đoán rằng "+ speech +" "+ new_report + ". Một số cách bạn có thể tránh vấn đề này là: " + soln + "--> Xin lưu ý, đây không phải là chẩn đoán. Luôn đến gặp bác sĩ nếu bạn nghi ngờ, hoặc nếu các triệu chứng của bạn trở nên tồi tệ hơn hoặc không cải thiện. Nếu tình hình của bạn nghiêm trọng, hãy luôn gọi dịch vụ khẩn cấp. Bạn có muốn đặt lịch hẹn với bác sĩ không?"
         res = {  "fulfillmentText": ans2, }
     
-    # Suffering_Patient_sym_report_no
+    # Suffering_Patient_sym_report_no nếu ko sẽ cho lời khuyên
     if query_response.get("action") == "Suffering_Patient_sym2.Suffering_Patient_sym2-custom.Suffering_Patient_sym3-custom.Suffering_Patient_sym_final-custom":
         r = "OK, "+ new_report + ". Một số cách bạn có thể tránh vấn đề này là: " + soln + "--> Xin lưu ý, đây không phải là chẩn đoán. Luôn đến gặp bác sĩ nếu bạn nghi ngờ, hoặc nếu các triệu chứng của bạn trở nên tồi tệ hơn hoặc không cải thiện. Nếu tình hình của bạn nghiêm trọng, hãy luôn gọi dịch vụ khẩn cấp. Bạn có muốn đặt lịch hẹn với bác sĩ không?"
         res = {  "fulfillmentText": r, }
@@ -321,4 +329,5 @@ def makeWebhookResult(req):
 
 if __name__ == "__main__":               
     port = int(os.getenv('PORT', 5000))
+    # debug=True giống như hot reloading
     app.run(debug=True, port=port, host='0.0.0.0')        
