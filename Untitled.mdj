@@ -7420,9 +7420,9 @@
 											"font": "Arial;13;1",
 											"left": 413,
 											"top": 583,
-											"width": 113.37548828125,
+											"width": 160.291015625,
 											"height": 13,
-											"text": "Hiện thông báo lỗi"
+											"text": "Thông báo thiếu thông tin"
 										},
 										{
 											"_type": "LabelView",
@@ -7455,7 +7455,7 @@
 									"font": "Arial;13;0",
 									"left": 408,
 									"top": 576,
-									"width": 123.37548828125,
+									"width": 170.291015625,
 									"height": 25,
 									"stereotypeLabel": {
 										"$ref": "AAAAAAF5u134fz1OAxk="
@@ -7475,7 +7475,7 @@
 							"containerChangeable": true,
 							"left": 408,
 							"top": 576,
-							"width": 123.37548828125,
+							"width": 170.291015625,
 							"height": 41,
 							"nameCompartment": {
 								"$ref": "AAAAAAF5u134fz1N1LM="
@@ -7503,7 +7503,7 @@
 									"visible": false,
 									"font": "Arial;13;0",
 									"left": 381,
-									"top": 562,
+									"top": 560,
 									"height": 13,
 									"alpha": 1.5707963267948966,
 									"distance": 15,
@@ -7524,7 +7524,7 @@
 									"visible": null,
 									"font": "Arial;13;0",
 									"left": 383,
-									"top": 547,
+									"top": 545,
 									"height": 13,
 									"alpha": 1.5707963267948966,
 									"distance": 30,
@@ -7545,7 +7545,7 @@
 									"visible": false,
 									"font": "Arial;13;0",
 									"left": 376,
-									"top": 591,
+									"top": 589,
 									"height": 13,
 									"alpha": -1.5707963267948966,
 									"distance": 15,
@@ -7563,7 +7563,7 @@
 								"$ref": "AAAAAAF5u1332j0MBeI="
 							},
 							"lineStyle": 1,
-							"points": "351:579;407:587",
+							"points": "351:578;407:585",
 							"showVisibility": true,
 							"nameLabel": {
 								"$ref": "AAAAAAF5u134qj1lwHE="
@@ -8524,7 +8524,7 @@
 					"_parent": {
 						"$ref": "AAAAAAF5eVGRIKP+2mE="
 					},
-					"name": "Hiện thông báo lỗi"
+					"name": "Thông báo thiếu thông tin"
 				},
 				{
 					"_type": "UMLObjectNode",

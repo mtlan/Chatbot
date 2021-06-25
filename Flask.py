@@ -182,6 +182,7 @@ def makeWebhookResult(req):
         global sym_duration
         sym_duration = query_response.get("queryText")
     
+    # Hỏi thông tin về căn bệnh
     # Suffering_Patient_Q2
     if query_response.get("action") == "DefaultWelcomeIntent.DefaultWelcomeIntent-custom.Suffering_Patient-custom.Suffering_Patient_symp_dur-custom":
         # Q. Heart Disease
@@ -268,6 +269,7 @@ def makeWebhookResult(req):
         
         ###### Create Report ############
         # sym_duration về thời gian bị mắc
+        # nếu chọn có thì xuất ra phần đã hỏi
         new_report = ""
         new_report += "Tóm tắt: Bạn đang có vấn đề về / đang bị "+problem+" trong "+sym_duration+"."
         if q1 == 1: new_report += "Bạn đã bị bệnh tim trước đây, "
@@ -303,7 +305,7 @@ def makeWebhookResult(req):
         r = "OK, "+ new_report + ". Một số cách bạn có thể tránh vấn đề này là: " + soln + "--> Xin lưu ý, đây không phải là chẩn đoán. Luôn đến gặp bác sĩ nếu bạn nghi ngờ, hoặc nếu các triệu chứng của bạn trở nên tồi tệ hơn hoặc không cải thiện. Nếu tình hình của bạn nghiêm trọng, hãy luôn gọi dịch vụ khẩn cấp. Bạn có muốn đặt lịch hẹn với bác sĩ không?"
         res = {  "fulfillmentText": r, }
         
-    ######## DOCTOR SECTION ##########
+    ######## DOCTOR ##########
     
     # app_date_time
     if query_response.get("action") == "doctors_list.doctors_list-custom":
